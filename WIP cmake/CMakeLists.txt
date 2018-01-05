@@ -1,0 +1,81 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(document2html)
+
+set (CMAKE_CXX_STANDARD 11)
+set(SOURCES
+	main.cpp
+	libs/tools.cpp
+	libs/curlwrapper/curlwrapper.cpp
+	libs/fileext/archive/archive.cpp
+	libs/fileext/cfb/cfb.cpp
+	libs/fileext/ooxml/ooxml.cpp
+	libs/fileext/csv/csv.cpp
+	libs/fileext/docx/docx.cpp
+	libs/fileext/excel/book.cpp
+	libs/fileext/excel/excel.cpp
+	libs/fileext/excel/format.cpp
+	libs/fileext/excel/formula.cpp
+	libs/fileext/excel/sheet.cpp
+	libs/fileext/excel/xlsx.cpp
+	libs/fileext/html/html.cpp
+	libs/fileext/rtf/formatting.cpp
+	libs/fileext/rtf/keyword.cpp
+	libs/fileext/rtf/rtf.cpp
+	libs/fileext/rtf/table.cpp
+	libs/fileext/txt/txt.cpp
+	libs/fileext/xml/xml.cpp
+	libs/fileext/doc/doc.cpp
+	libs/fileext/epub/epub.cpp
+	libs/fileext/json/json.cpp
+	libs/fileext/odt/odt.cpp
+	libs/fileext/pdf/pdf.cpp
+	libs/fileext/ppt/ppt.cpp
+	libs/fileext/fileext.cpp
+	libs/getoptpp/getoptpp.cpp
+	libs/miniz/miniz.c
+	libs/pugixml/pugixml.cpp
+	libs/pymagic/pymagic.cpp
+	libs/encoding/encoding.cpp
+	libs/lodepng/lodepng.cpp
+)
+set(HEADERS
+	libs/tools.hpp
+	libs/curlwrapper/curlwrapper.hpp
+	libs/fileext/archive/archive.hpp
+	libs/fileext/cfb/cfb.hpp
+	libs/fileext/ooxml/ooxml.hpp
+	libs/fileext/csv/csv.hpp
+	libs/fileext/docx/docx.hpp
+	libs/fileext/excel/biffh.hpp
+	libs/fileext/excel/book.hpp
+	libs/fileext/excel/excel.hpp
+	libs/fileext/excel/format.hpp
+	libs/fileext/excel/formula.hpp
+	libs/fileext/excel/sheet.hpp
+	libs/fileext/excel/xlsx.hpp
+	libs/fileext/html/html.hpp
+	libs/fileext/rtf/formatting.hpp
+	libs/fileext/rtf/keyword.hpp
+	libs/fileext/rtf/rtf.hpp
+	libs/fileext/rtf/table.hpp
+	libs/fileext/txt/txt.hpp
+	libs/fileext/xml/xml.hpp
+	libs/fileext/doc/doc.hpp
+	libs/fileext/epub/epub.hpp
+	libs/fileext/json/json.hpp
+	libs/fileext/odt/odt.hpp
+	libs/fileext/pdf/pdf.hpp
+	libs/fileext/ppt/ppt.hpp
+	libs/fileext/fileext.hpp
+	libs/getoptpp/getoptpp.hpp
+	libs/miniz/miniz.c
+	libs/pugixml/pugiconfig.hpp
+	libs/pugixml/pugixml.hpp
+	libs/pymagic/pymagic.hpp
+	libs/json.hpp
+	libs/encoding/encoding.hpp
+	libs/lodepng/lodepng.h
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})

@@ -1,0 +1,29 @@
+version: '{build}'
+
+init:
+  - git config --global core.autocrlf input
+
+image:
+  - Visual Studio 2015
+
+environment:
+  matrix:
+    - QT: C:\Qt\5.7\msvc2015_64
+      PLATFORM: amd64
+      COMPILER: msvc
+      VSVER: 14
+
+matrix:
+  fast_finish: true
+
+install:
+  - git submodule update --init --recursive
+
+before_build:
+  - set PATH=%QT%\bin\;C:\Qt\Tools\QtCreator\bin\;C:\Qt\5.7\bin\;%PATH%;
+
+build_script:
+  - PATH=%QT%\bin\;C:\Qt\Tools\QtCreator\bin\;C:\Qt\QtIFW2.0.1\bin\;%PATH%
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
+  - qmake ./src/document2html.pro
+  - jom

@@ -1,0 +1,63 @@
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5']
+      env:
+        - COMPILER=g++-5
+        - CXX=g++-5
+        - QT_BASE=57
+
+    #- os: osx
+    #  compiler: clang
+    #  env:
+    #   - QT_BASE=57
+
+before_install:
+  - if [ "$QT_BASE" = "54" ]; then sudo add-apt-repository ppa:beineri/opt-qt542-trusty -y; fi
+  - if [[ "$QT_BASE" = "55" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt551-trusty -y; fi
+  - if [ "$QT_BASE" = "56" ]; then sudo add-apt-repository ppa:beineri/opt-qt562-trusty -y; fi
+  - if [[ "$QT_BASE" = "57" && "$TRAVIS_OS_NAME" = "linux" ]]; then sudo add-apt-repository ppa:beineri/opt-qt571-trusty -y; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
+      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test;
+      sudo apt-get update -qq;
+    else
+      brew update;
+    fi
+
+install:
+  - if [ "$QT_BASE" = "54" ]; then sudo apt-get install -qq qt54base; source /opt/qt54/bin/qt54-env.sh; fi
+  - if [ "$QT_BASE" = "55" ]; then
+      if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
+        sudo apt-get install -qq qt55base; source /opt/qt55/bin/qt55-env.sh; 
+      else
+        brew install qt55;
+        brew link --force qt55;
+      fi
+    fi
+  - if [ "$QT_BASE" = "56" ]; then sudo apt-get install -qq qt56base; source /opt/qt56/bin/qt56-env.sh; fi
+  - if [ "$QT_BASE" = "57" ]; then
+      if [ "$TRAVIS_OS_NAME" = "linux" ]; then 
+        sudo apt-get install -qq qt57base qt57multimedia; source /opt/qt57/bin/qt57-env.sh;
+        sudo apt-get install libqt5opengl5-dev;
+        sudo apt-get install libtidy-dev;
+        sudo apt-get install libcurl4-openssl-dev;
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100;
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100;
+        sudo update-alternatives --install /usr/bin/cpp cpp /usr/bin/cpp-5 100;
+      else
+        brew install qt5;
+        brew link --force qt5;
+      fi
+    fi
+
+script:
+ - qmake ./src/document2html.pro
+ - make

@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['savehtml',['saveHtml',['../classfileext_1_1_file_extension.html#a301c1df2275a047415cf9ec324f29101',1,'fileext::FileExtension']]],
+  ['sheet',['Sheet',['../classexcel_1_1_sheet.html',1,'excel::Sheet'],['../classexcel_1_1_sheet.html#ad81c0bda53715c3915ab6a9ea6d76f66',1,'excel::Sheet::Sheet()']]],
+  ['sheet_2ecpp',['sheet.cpp',['../sheet_8cpp.html',1,'']]],
+  ['sheet_2ehpp',['sheet.hpp',['../sheet_8hpp.html',1,'']]],
+  ['sheetrange',['sheetRange',['../classexcel_1_1_formula.html#a0e9c14c3c7721c322743762c4dee3e2e',1,'excel::Formula']]],
+  ['skip_5fchar_5fdict',['SKIP_CHAR_DICT',['../namespaceexcel.html#a67a38a43f317fada476003b0cbdb8c7d',1,'excel']]],
+  ['skipgroup',['skipGroup',['../classrtf_1_1_rtf.html#ae654936ddae564f322a8c7091697d64e',1,'rtf::Rtf']]],
+  ['sleep',['sleep',['../namespacetools.html#a03bccb109556c3cc851ca881d4227628',1,'tools']]],
+  ['status_5fok',['STATUS_OK',['../namespacecurlwrapper.html#adfdbecb51cd70de090d5f1945d18d44d',1,'curlwrapper']]],
+  ['std_5fformat_5fcode_5ftypes',['STD_FORMAT_CODE_TYPES',['../namespaceexcel.html#abac4cddf1a3e8c9f1b8e4d117e0dcc78',1,'excel']]],
+  ['std_5fformat_5fstrings',['STD_FORMAT_STRINGS',['../namespaceexcel.html#ab46fb682f63360b8cd79c8f8ac954907',1,'excel']]],
+  ['stringrecordcontent',['stringRecordContent',['../classexcel_1_1_sheet.html#a64dc271280d5e8a58903a36c850b6ef9',1,'excel::Sheet']]],
+  ['style_5ffile',['STYLE_FILE',['../namespaceexcel.html#af50fc35337b79c4cb84f7ad559d320d5',1,'excel::STYLE_FILE()'],['../namespacejson.html#a9e304d8bbb3fe84ca3a6e086e8ab8911',1,'json::STYLE_FILE()'],['../namespaceppt.html#ac23ca31ab28661f69740611e41107d88',1,'ppt::STYLE_FILE()'],['../namespacexml.html#a2fec89e1310c7f56eccfe794433d71d5',1,'xml::STYLE_FILE()']]],
+  ['supbook_5faddin',['SUPBOOK_ADDIN',['../namespaceexcel.html#a24b2bb05a1507d7970e4ad1bc82357cea64f13245cfb8aa20b4837f6c01460b2a',1,'excel']]],
+  ['supbook_5fddeole',['SUPBOOK_DDEOLE',['../namespaceexcel.html#a24b2bb05a1507d7970e4ad1bc82357ceaf7db0f6b4048a5f7b0bd02d80d98febd',1,'excel']]],
+  ['supbook_5fexternal',['SUPBOOK_EXTERNAL',['../namespaceexcel.html#a24b2bb05a1507d7970e4ad1bc82357cea468fbfb2b59bc726187b1db43629c188',1,'excel']]],
+  ['supbook_5finternal',['SUPBOOK_INTERNAL',['../namespaceexcel.html#a24b2bb05a1507d7970e4ad1bc82357cead953bd8e10fa80bd2f9ad8403412d4aa',1,'excel']]],
+  ['supbook_5funk',['SUPBOOK_UNK',['../namespaceexcel.html#a24b2bb05a1507d7970e4ad1bc82357cea6b58a26469b6a58fe7e774896227b225',1,'excel']]],
+  ['supported_5fversions',['SUPPORTED_VERSIONS',['../namespaceexcel.html#a455291212cb4d142867a652d243f6c83',1,'excel']]],
+  ['sztab0',['SZTAB0',['../namespaceexcel.html#af146eee1569edcd0185d31231c012bec',1,'excel']]]
+];

@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['date_5fchar_5fdict',['DATE_CHAR_DICT',['../namespaceexcel.html#a3ebfad5975bb10cab9f109194ca40a02',1,'excel']]],
+  ['decode',['decode',['../namespaceencoding.html#a310a9bcb06c30dd1956b4e365e069df0',1,'encoding']]],
+  ['decodeascii85',['decodeAscii85',['../classpdf_1_1_pdf.html#a70dcbcdd5ececb34d407f0e9b6d515c0',1,'pdf::Pdf']]],
+  ['decodeasciihex',['decodeAsciiHex',['../classpdf_1_1_pdf.html#a6335eac778e37c568a2b79c1c0fc08e6',1,'pdf::Pdf']]],
+  ['decodeccittfax',['decodeCcittFax',['../classpdf_1_1_pdf.html#ac81e2485e88153fed1d651a71afb01c7',1,'pdf::Pdf']]],
+  ['decodeflate',['decodeFlate',['../classpdf_1_1_pdf.html#aa15f55108013a680271335d0348800f1',1,'pdf::Pdf']]],
+  ['decodestream',['decodeStream',['../classpdf_1_1_pdf.html#a42eefb49bc19a679793ad3b1d30ce205',1,'pdf::Pdf']]],
+  ['decodeutf16',['decodeUTF16',['../classcfb_1_1_cfb.html#aaf6767ebf961725620d890b0daa04e0a',1,'cfb::Cfb']]],
+  ['default_5fpalette',['DEFAULT_PALETTE',['../namespaceexcel.html#a854675fbd9e3ea3056c2718be9c1cab4',1,'excel']]],
+  ['default_5fpalette_5fb2',['DEFAULT_PALETTE_B2',['../namespaceexcel.html#a5e35ec02593e1348f13ee2b291416617',1,'excel']]],
+  ['default_5fpalette_5fb5',['DEFAULT_PALETTE_B5',['../namespaceexcel.html#ac7c80151376ffab308389d1096d90caa',1,'excel']]],
+  ['default_5fpalette_5fb8',['DEFAULT_PALETTE_B8',['../namespaceexcel.html#a867598d4fb59f3ec00c7cb537dd2db19',1,'excel']]],
+  ['deletedir',['deleteDir',['../namespacetools.html#a038d4029abc7692fb9e6606089d8ca5b',1,'tools']]],
+  ['deletemerging',['deleteMerging',['../classhtml_1_1_html.html#ad653659859ec911ca0009c03e5d67c04',1,'html::Html::deleteMerging()'],['../classodt_1_1_odt.html#a4afa739477279f4124acb2eb8130b466',1,'odt::Odt::deleteMerging()']]],
+  ['detectdelimiter',['detectDelimiter',['../classcsv_1_1_csv.html#af82957d0736688be4e7ae98f798758b9',1,'csv::Csv']]],
+  ['doc',['Doc',['../classdoc_1_1_doc.html',1,'doc::Doc'],['../namespacedoc.html',1,'doc'],['../classdoc_1_1_doc.html#aeede5fba4ff0e38d488123f11ff77467',1,'doc::Doc::Doc()']]],
+  ['doc_2ecpp',['doc.cpp',['../doc_8cpp.html',1,'']]],
+  ['doc_2ehpp',['doc.hpp',['../doc_8hpp.html',1,'']]],
+  ['document2html',['document2html',['../namespacedocument2html.html',1,'']]],
+  ['docx',['Docx',['../classdocx_1_1_docx.html',1,'docx::Docx'],['../namespacedocx.html',1,'docx'],['../classdocx_1_1_docx.html#a8ba9bab82e7acfa46c03ed2aba040ef8',1,'docx::Docx::Docx()']]],
+  ['docx_2ecpp',['docx.cpp',['../docx_8cpp.html',1,'']]],
+  ['docx_2ehpp',['docx.hpp',['../docx_8hpp.html',1,'']]],
+  ['downloadfile',['downloadFile',['../namespacecurlwrapper.html#ab9be8a703f474d8851f71d6c5116ff05',1,'curlwrapper']]]
+];

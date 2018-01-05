@@ -1,0 +1,29 @@
+image: Visual Studio 2015   # на этом VM-образе установлены все Visual Studio с 2008 по 2015
+
+init:
+    # секция инициализации, исполняется до клонирования проекта
+    # скорее всего, строчка ниже необязательна (так должно быть по умолчанию),
+    # вместе с тем, она присутствует в официальных примерах, так что пусть будет:
+    - git config --global core.autocrlf input
+
+#clone_folder: c:\projects\my-prj # выбираем локальную директорию для клонирования
+shallow_clone: true              # копируем только последний коммит, без истории (git clone --depth 1)
+
+matrix:
+    fast_finish: false           # не останавливаемся после возникновения ошибки в каком-то из заданий
+
+platform:
+    # будем гонять CI на amd64 и x86...
+    - x86
+
+
+environment:
+    matrix:
+        - TOOLCHAIN: msvc15
+
+build_script:
+    # скрипт сборки проекта:
+    - mkdir build
+    - cd build
+    - cmake ../src/ %CMAKE_CONFIGURE_FLAGS%
+    - cmake --build . %CMAKE_BUILD_FLAGS%
