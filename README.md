@@ -1,9 +1,9 @@
 # Document2HTML converter
 
-[![Build Status](https://travis-ci.org/dmryutov/document2converter.svg?branch=master)](https://travis-ci.org/dmryutov/document2converter)
+[![Build Status](https://travis-ci.org/dmryutov/document2html.svg?branch=master)](https://travis-ci.org/dmryutov/document2html)
 [![Build status](https://ci.appveyor.com/api/projects/status/o3p0or25fdlnw22v?svg=true)](https://ci.appveyor.com/project/dmryutov/document2html)
-[![Github Releases](https://img.shields.io/github/release/dmryutov/document2converter.svg)](https://github.com/dmryutov/document2converter/releases)
-[![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://dmryutov.github.io/document2converter)
+[![Github Releases](https://img.shields.io/github/release/dmryutov/document2html.svg)](https://github.com/dmryutov/document2html/releases)
+[![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://dmryutov.github.io/document2html)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 Documents to HTML converter
