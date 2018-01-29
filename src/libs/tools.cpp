@@ -3,7 +3,7 @@
  * @package tools
  * @file    tools.cpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @date    04.09.2016 -- 10.11.2017
+ * @date    04.09.2016 -- 29.01.2018
  */
 #include <algorithm>
 #include <chrono>
@@ -220,7 +220,7 @@ std::string rpad(const std::string& str, size_t length, char filler) {
 		return str;
 }
 
-std::string replace(const std::string& str, const std::string& to, int offset, int length) {
+std::string replace(const std::string& str, const std::string& to, size_t offset, size_t length) {
 	return str.substr(0, offset - 1) + to + str.substr(offset + length);
 }
 
@@ -258,10 +258,10 @@ std::string replaceAll2(std::string str, const std::string& from, const std::str
 	return str;
 }
 
-int findNth(const std::string& str, const char delimiter, const int occurrence) {
+size_t findNth(const std::string& str, const char delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return 0;
-	int res = 0;
+	size_t res = 0;
 	for (size_t i = 0; i < str.size(); ++i) {
 		if (str[i] == delimiter)
 			res++;
@@ -271,10 +271,10 @@ int findNth(const std::string& str, const char delimiter, const int occurrence) 
 	return str.size();
 }
 
-int findNth(const std::wstring& str, const wchar_t delimiter, const int occurrence) {
+size_t findNth(const std::wstring& str, const wchar_t delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return 0;
-	int res = 0;
+	size_t res = 0;
 	for (size_t i = 0; i < str.size(); ++i) {
 		if (str[i] == delimiter)
 			res++;
@@ -284,13 +284,13 @@ int findNth(const std::wstring& str, const wchar_t delimiter, const int occurren
 	return str.size();
 }
 
-int findNth(const std::wstring& str, const std::wstring& delimiter, const int occurrence) {
+size_t findNth(const std::wstring& str, const std::wstring& delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return 0;
 	size_t pos  = 0;
 	size_t from = 0;
 	size_t size = delimiter.size();
-	int i = 0;
+	size_t i = 0;
 	while (i < occurrence) {
 		pos = str.find(delimiter, from);
 		if (std::wstring::npos == pos)
@@ -301,11 +301,11 @@ int findNth(const std::wstring& str, const std::wstring& delimiter, const int oc
 	return pos;
 }
 
-int rfindNth(const std::string& str, const char delimiter, const int occurrence) {
+size_t rfindNth(const std::string& str, const char delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return str.size();
-	int res = 0;
-	for (int i = str.size(); i >= 0; --i) {
+	size_t res = 0;
+	for (int i = static_cast<int>(str.size()); i >= 0; --i) {
 		if (str[i] == delimiter)
 			res++;
 		if (res == occurrence)
@@ -314,11 +314,11 @@ int rfindNth(const std::string& str, const char delimiter, const int occurrence)
 	return 0;
 }
 
-int rfindNth(const std::wstring& str, const wchar_t delimiter, const int occurrence) {
+size_t rfindNth(const std::wstring& str, const wchar_t delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return str.size();
-	int res = 0;
-	for (int i = str.size(); i >= 0; --i) {
+	size_t res = 0;
+	for (int i = static_cast<int>(str.size()); i >= 0; --i) {
 		if (str[i] == delimiter)
 			res++;
 		if (res == occurrence)
@@ -327,12 +327,12 @@ int rfindNth(const std::wstring& str, const wchar_t delimiter, const int occurre
 	return 0;
 }
 
-int rfindNth(const std::wstring& str, const std::wstring& delimiter, const int occurrence) {
+size_t rfindNth(const std::wstring& str, const std::wstring& delimiter, const size_t occurrence) {
 	if (occurrence <= 0)
 		return 0;
 	size_t pos = 0;
 	size_t to  = str.size();
-	int res = 0;
+	size_t res = 0;
 	while (res < occurrence) {
 		pos = str.rfind(delimiter, to);
 		if (std::string::npos == pos)
@@ -404,11 +404,11 @@ std::string xorEncrypt(const std::string& str, const std::string& key) {
 // XML
 int xmlChildrenCount(const pugi::xml_node& node, const std::string& childName) {
 	if (childName.empty())
-		return std::distance(node.children().begin(),
-							 node.children().end());
+		return (int)std::distance(node.children().begin(),
+								  node.children().end());
 	else
-		return std::distance(node.children(childName.c_str()).begin(),
-							 node.children(childName.c_str()).end());
+		return (int)std::distance(node.children(childName.c_str()).begin(),
+								  node.children(childName.c_str()).end());
 }
 
 void xmlDeleteAllChildren(pugi::xml_node& node) {

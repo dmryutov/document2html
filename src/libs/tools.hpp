@@ -4,7 +4,7 @@
  * @file    tools.hpp
  * @author  dmryutov (dmryutov@gmail.com)
  * @version 1.3
- * @date    04.09.2016 -- 10.11.2017
+ * @date    04.09.2016 -- 29.01.2018
  */
 #pragma once
 
@@ -280,7 +280,7 @@ namespace tools {
 	 *     New string
 	 * @since 1.1
 	 */
-	std::string replace(const std::string& str, const std::string& to, int offset, int length);
+	std::string replace(const std::string& str, const std::string& to, size_t offset, size_t length);
 
 	/**
 	 * @brief
@@ -336,7 +336,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int findNth(const std::string& str, const char delimiter, const int occurrence);
+	size_t findNth(const std::string& str, const char delimiter, const size_t occurrence);
 
 	/**
 	 * @brief
@@ -351,7 +351,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int findNth(const std::wstring& str, const wchar_t delimiter, const int occurrence);
+	size_t findNth(const std::wstring& str, const wchar_t delimiter, const size_t occurrence);
 
 	/**
 	 * @brief
@@ -366,7 +366,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int findNth(const std::wstring& str, const std::wstring& delimiter, const int occurrence);
+	size_t findNth(const std::wstring& str, const std::wstring& delimiter, const size_t occurrence);
 
 	/**
 	 * @brief
@@ -381,7 +381,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int rfindNth(const std::string& str, const char delimiter, const int occurrence);
+	size_t rfindNth(const std::string& str, const char delimiter, const size_t occurrence);
 
 	/**
 	 * @brief
@@ -396,7 +396,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int rfindNth(const std::wstring& str, const wchar_t delimiter, const int occurrence);
+	size_t rfindNth(const std::wstring& str, const wchar_t delimiter, const size_t occurrence);
 
 	/**
 	 * @brief
@@ -411,7 +411,7 @@ namespace tools {
 	 *     Occurrence position
 	 * @since 1.0
 	 */
-	int rfindNth(const std::wstring& str, const std::wstring& delimiter, const int occurrence);
+	size_t rfindNth(const std::wstring& str, const std::wstring& delimiter, const size_t occurrence);
 
 	/**
 	 * @brief

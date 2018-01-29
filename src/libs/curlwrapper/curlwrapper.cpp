@@ -3,7 +3,7 @@
  * @package   curlwrapper
  * @file      curlwrapper.cpp
  * @author    dmryutov (dmryutov@gmail.com)
- * @date      23.03.2017 -- 29.10.2017
+ * @date      23.03.2017 -- 28.01.2018
  */
 #include <fstream>
 #include <random>
@@ -26,10 +26,10 @@ std::random_device rd;
 std::default_random_engine gen(rd());
 
 std::string getRandomProxy(const std::vector<std::string>& proxyList) {
-	int size = proxyList.size();
+	size_t size = proxyList.size();
 	if (size == 0)
 		return "";
-	std::uniform_int_distribution<int> dist(0, size);
+	std::uniform_int_distribution<int> dist(0, (int)size);
 	return proxyList[dist(gen)];
 }
 
