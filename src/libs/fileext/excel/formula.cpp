@@ -4,7 +4,7 @@
  * @file      formula.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 29.01.2018
  */
 #include <tuple>
 #include <unordered_map>
@@ -583,7 +583,7 @@ void Formula::evaluateFormula(Name& name, int nameIndex, int level) {
 				else {
 					kind  = oERR;
 					value = m_book->readByte<unsigned char>(data, pos+1, 1);
-					text  = "\"" + ERROR_TEXT_FROM_CODE.at(value) + "\"";
+					text  = "\"" + ERROR_TEXT_FROM_CODE.at(static_cast<int>(value)) + "\"";
 				}
 				// Operand(kind, value, LEAF_RANK, text)
 				stack.push_back(Operand(kind, {}, LEAF_RANK, text, std::to_string(value)));
@@ -673,7 +673,7 @@ void Formula::evaluateFormula(Name& name, int nameIndex, int level) {
 						else {
 							int respos = -argCount + 2 - testValue;
 							if (respos < 0)
-								respos = stack.size() - respos;
+								respos = (int)stack.size() - respos;
 							auto& chosen = stack[respos];
 							if (chosen.m_kind == oMSNG) {
 								res.m_kind      = oNUM;
@@ -691,7 +691,7 @@ void Formula::evaluateFormula(Name& name, int nameIndex, int level) {
 					if (testOp.m_kind == oNUM && (1 <= testValue && testValue < argCount)) {
 						int respos = -argCount - testValue;
 						if (respos < 0)
-							respos = stack.size() - respos;
+							respos = (int)stack.size() - respos;
 
 						auto& chosen = stack[respos];
 						if (chosen.m_kind == oMSNG){
@@ -1135,8 +1135,8 @@ void Formula::unaryOperation(int code, std::vector<Operand>& stack, int resultKi
 void Formula::rangeOperation(std::vector<int>& coords, Ref3D& leftValue,
 							 Ref3D& rightValue, int functionType) const
 {
-	int size = leftValue.m_coords.size();
-	for (int i = 0; i < size; ++i) {
+	size_t size = leftValue.m_coords.size();
+	for (size_t i = 0; i < size; ++i) {
 		if (((i + functionType) & 1) == 1)
 			coords.push_back(std::max(leftValue.m_coords[i], rightValue.m_coords[i]));
 		else

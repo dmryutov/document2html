@@ -5,7 +5,7 @@
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright rembish (https://github.com/rembish/TextAtAnyCost)
  * @version   1.1
- * @date      18.09.2016 -- 18.10.2017
+ * @date      18.09.2016 -- 28.01.2018
  */
 #include <algorithm>
 #include <cmath>
@@ -59,8 +59,8 @@ void Cfb::parse() {
 }
 
 std::string Cfb::getStream(const std::string& name, int offset, bool isRoot) const {
-	int fatEntriesSize = m_fatEntries.size();
-	for (int id = offset; id < fatEntriesSize; id++) {
+	size_t fatEntriesSize = m_fatEntries.size();
+	for (size_t id = offset; id < fatEntriesSize; id++) {
 		if (m_fatEntries[id].first == name) {
 			std::string stream;
 			int start = m_fatEntries.at(id).second.at("start");
@@ -115,8 +115,8 @@ std::string Cfb::decodeUTF16(const std::string& data) {
 	std::string input = binToHex(data);
 	std::string out;
 
-	int size = input.size();
-	for (int i = 0; i < size; i += 4) {
+	size_t size = input.size();
+	for (size_t i = 0; i < size; i += 4) {
 		unsigned int code;
 		std::stringstream ss;
 		ss << std::hex << input.substr(i, 4);
@@ -162,7 +162,7 @@ std::string Cfb::unicodeToUtf8(std::string input, bool check) const {
 	if (check && input.find('\0') != std::string::npos) {
 		size_t i;
 		while ((i = input.find(0x13)) != std::string::npos) {
-			auto j = input.find(0x15, i + 1);
+			size_t j = input.find(0x15, i + 1);
 			if (j == std::string::npos)
 				break;
 			input = tools::replace(input, "", i, j - i);
@@ -317,7 +317,7 @@ void Cfb::handleDirectoryStructure() {
 					{"right", readByte<int>(entry, 0x48, 4)},  // Right elements
 					{"child", readByte<int>(entry, 0x4C, 4)},  // Child element
 					{"start", readByte<int>(entry, 0x74, 4)},  // Offset in FAT or miniFAT
-					{"size",  readByte<long long>(entry, 0x78, 8)}  // Data size
+					{"size",  readByte<int>(entry, 0x78, 8)}   // Data size (long long)
 				}
 			});
 		}
@@ -334,7 +334,7 @@ void Cfb::handleDirectoryStructure() {
 
 std::string Cfb::utf16ToAnsi(const std::string& input) const {
 	std::string out;
-	int size = input.size();
+	int size = static_cast<int>(input.size());
 	for (int i = 0; i < size; i += 2)
 		out += static_cast<char>(readByte<unsigned short>(input, i, 2));
 	return out;

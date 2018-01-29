@@ -4,7 +4,7 @@
  * @file      sheet.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #include "../../tools.hpp"
 
@@ -135,7 +135,7 @@ const std::unordered_map<int, std::vector<std::string>> TABLE_COLOR {
 
 
 // public:
-Sheet::Sheet(Book* book, int position, const std::string& name, int number, pugi::xml_node& table)
+Sheet::Sheet(Book* book, int position, const std::string& name, size_t number, pugi::xml_node& table)
 : m_book(book), m_table(table), m_name(name), m_number(number),
   m_maxRowCount((m_book->m_biffVersion >= 80) ? 65536 : 16384), m_position(position) {}
 
@@ -232,7 +232,7 @@ void Sheet::read() {
 		else if (code == XL_MULRK) {
 			unsigned short rowIndex = m_book->readByte<unsigned short>(data, 0, 2);
 			unsigned short firstCol = m_book->readByte<unsigned short>(data, 2, 2);
-			unsigned short lastCol  = m_book->readByte<unsigned short>(data, data.size() - 2, 2);
+			unsigned short lastCol  = m_book->readByte<unsigned short>(data, (int)data.size()-2, 2);
 			int pos = 4;
 
 			for (int i = firstCol; i <= lastCol; ++i) {
@@ -1061,7 +1061,7 @@ std::string Sheet::stringRecordContent(const std::string& data) {
 			offset++;
 		std::string chunk  = data.substr(offset);
 		result            += chunk;
-		foundCharCount    += chunk.size();
+		foundCharCount    += static_cast<unsigned short>(chunk.size());
 		if (foundCharCount == expectedCharCount)
 			return result;
 		if (foundCharCount > expectedCharCount)
@@ -1115,7 +1115,7 @@ int Sheet::fixedXfIndexB2(const std::string& cellAttributes, int trueXfIndex) {
 }
 
 int Sheet::insertXfB20(const std::string& cellAttributes, bool isStyle) {
-	int xfx = m_book->m_xfList.size();
+	int xfx = static_cast<int>(m_book->m_xfList.size());
 	XF xf;
 	fakeXfFromCellAttrB20(xf, cellAttributes, isStyle);
 	xf.m_xfIndex = xfx;
@@ -1193,7 +1193,7 @@ std::string Sheet::getNullTerminatedUnicode(const std::string& buf, int& offset)
 }
 
 void Sheet::handleHyperlink(const std::string& data) {
-	int recordSize = data.size();
+	int recordSize = static_cast<int>(data.size());
 	Hyperlink hlink;
 	hlink.m_firstRowIndex = m_book->readByte<unsigned short>(data, 0, 2);
 	hlink.m_lastRowIndex  = m_book->readByte<unsigned short>(data, 2, 2);
@@ -1287,7 +1287,7 @@ void Sheet::handleMSObj(const std::string& data, MSObj& msObj) {
 		msObj.m_isNull = true;
 		return;
 	}
-	int size = data.size();
+	int size = static_cast<int>(data.size());
 	int pos  = 0;
 	while (pos < size) {
 		unsigned short ft = m_book->readByte<unsigned short>(data, pos,   2);
@@ -1338,7 +1338,7 @@ void Sheet::handleMSTxo(const std::string& data, MSTxo& msTxo) {
 		msTxo.m_isNull = true;
 		return;
 	}
-	int size                = data.size();
+	size_t size             = data.size();
 	unsigned short options  = m_book->readByte<unsigned short>(data, 0, 2);
 	msTxo.m_rotation        = m_book->readByte<unsigned short>(data, 2, 2);
 	std::string controlInfo = data.substr(4, 6);
@@ -1379,10 +1379,8 @@ void Sheet::handleMSTxo(const std::string& data, MSTxo& msTxo) {
 		m_book->getRecordParts(code2, size2, data2);
 
 		for (int pos = 0; pos < size2; pos += 8) {
-			msTxo.m_richtextRunlist.emplace_back(
-				m_book->readByte<unsigned short>(data2, pos,   2),
-				m_book->readByte<unsigned short>(data2, pos+2, 2)
-			);
+			msTxo.m_richtextRunlist.emplace_back(m_book->readByte<unsigned short>(data2, pos,   2),
+												 m_book->readByte<unsigned short>(data2, pos+2, 2));
 			totalRuns += 8;
 		}
 	}
@@ -1397,13 +1395,13 @@ void Sheet::handleMSTxo(const std::string& data, MSTxo& msTxo) {
 
 void Sheet::handleNote(const std::string& data, std::unordered_map<unsigned short, MSTxo>& msTxos) {
 	Note note;
-	int size = data.size();
+	int size = static_cast<int>(data.size());
 	if (m_book->m_biffVersion < 80) {
 		note.m_rowIndex = m_book->readByte<unsigned short>(data, 0, 2);
 		note.m_colIndex = m_book->readByte<unsigned short>(data, 2, 2);
 		unsigned short expectedByteCount = m_book->readByte<unsigned short>(data, 4, 2);
 
-		int nb = size - 6;
+		unsigned short nb = size - 6;
 		note.m_text = data.substr(6, size);
 		expectedByteCount -= nb;
 		while (expectedByteCount > 0) {
@@ -1654,11 +1652,11 @@ std::string Sheet::getColor(const XFColor& color) const {
 
 	if (color.m_tint < 0) {
 		for (auto& c : result)
-			c = c * (1 + color.m_tint);
+			c = static_cast<unsigned char>(c * (1 + color.m_tint));
 	}
 	else if (color.m_tint > 0) {
 		for (auto& c : result)
-			c = c * (1 - color.m_tint) + (255 - 255 * (1 - color.m_tint));
+			c = static_cast<unsigned char>(c * (1 - color.m_tint) + (255 - 255 * (1 - color.m_tint)));
 	}
 
 	return "rgb("+ std::to_string(result[0]) +", "+

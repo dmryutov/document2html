@@ -4,7 +4,7 @@
  * @file      formatting.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #include <regex>
 
@@ -173,7 +173,7 @@ void Formatting::initializeBook() {
 		m_book->m_colorMap[i] = DEFAULT_PALETTE_B8[i];
 	// Add default palette depending on the version
 	auto& defaultPalette = DEFAULT_PALETTE.at(m_book->m_biffVersion);
-	int paletteSize = defaultPalette.size();
+	int paletteSize = static_cast<int>(defaultPalette.size());
 	for (int i = 0; i < paletteSize; ++i)
 		m_book->m_colorMap[i+8] = defaultPalette[i];
 	// Add the specials -- None means the RGB value is not known
@@ -193,7 +193,7 @@ void Formatting::handleFont(const std::string& data) {
 	if (m_book->m_encoding.empty())
 		m_book->getEncoding();
 
-	int size = m_book->m_fontList.size();
+	int size = static_cast<int>(m_book->m_fontList.size());
 	if (size == 4) {
 		Font f;
 		f.m_name      = "Dummy Font";
@@ -542,7 +542,7 @@ void Formatting::handleXf(const std::string& data) {
 		throw std::logic_error("programmer stuff-up: bv=" + std::to_string(m_book->m_biffVersion));
 	}
 
-	xf.m_xfIndex = m_book->m_xfList.size();
+	xf.m_xfIndex = static_cast<int>(m_book->m_xfList.size());
 	int cellType = XL_CELL_NUMBER;
 	if (m_book->m_formatMap.find(xf.m_formatKey) != m_book->m_formatMap.end()) {
 		unsigned char type = m_book->m_formatMap[xf.m_formatKey].m_type;
@@ -563,7 +563,7 @@ void Formatting::handlePalette(const std::string& data) {
 	unsigned short colorCount = m_book->readByte<unsigned short>(data, 0, 2);
 	//int expectedColorCount  = (m_book->m_biffVersion >= 50) ? 56 : 16;
 	int expectedSize = 4 * colorCount + 2;
-	int actualSize   = data.size();
+	int actualSize   = static_cast<int>(data.size());
 	int tolerance    = 4;
 	if (expectedSize > actualSize || actualSize > expectedSize + tolerance)
 		throw std::logic_error(
@@ -623,9 +623,9 @@ void Formatting::xfEpilogue() {
 		return;
 
 	m_book->m_xfEpilogueDone = true;
-	int xfCount = m_book->m_xfList.size();
+	size_t xfCount = m_book->m_xfList.size();
 
-	for (int i = 0; i < xfCount; ++i) {
+	for (size_t i = 0; i < xfCount; ++i) {
 		XF& xf = m_book->m_xfList[i];
 
 		int cellType = XL_CELL_TEXT;
@@ -638,7 +638,7 @@ void Formatting::xfEpilogue() {
 		// Now for some assertions
 		if (!m_book->m_addStyle || xf.m_isStyle)
 			continue;
-		if (xf.m_parentStyleIndex < 0 || xf.m_parentStyleIndex >= xfCount)
+		if (xf.m_parentStyleIndex < 0 || xf.m_parentStyleIndex >= static_cast<int>(xfCount))
 			xf.m_parentStyleIndex = 0;
 	}
 }

@@ -4,7 +4,7 @@
  * @file      book.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 29.01.2018
  */
 #include <fstream>
 
@@ -117,8 +117,8 @@ void Book::openWorkbookXls() {
 	else {
 		parseGlobals();
 		m_sheetList.clear();
-		int sheetCount = m_sheetNames.size();
-		for (int i = 0; i < sheetCount; ++i)
+		size_t sheetCount = m_sheetNames.size();
+		for (size_t i = 0; i < sheetCount; ++i)
 			getSheet(i);
 	}
 	m_sheetCount = m_sheetList.size();
@@ -371,8 +371,8 @@ void Book::getFakeGlobalsSheet() {
 	m_sheetAbsolutePos = {0};
 	m_sheetVisibility  = {0};  // One sheet, visible
 	m_sheetList.emplace_back(Sheet(this, m_position, "Sheet 1", 0, table));
-	int sheetCount = m_sheetNames.size();
-	for (int i = 0; i < sheetCount; ++i)
+	size_t sheetCount = m_sheetNames.size();
+	for (size_t i = 0; i < sheetCount; ++i)
 		getSheet(i);
 }
 
@@ -438,7 +438,7 @@ void Book::parseGlobals() {
 	}
 }
 
-void Book::getSheet(int sheetId, bool shouldUpdatePos) {
+void Book::getSheet(size_t sheetId, bool shouldUpdatePos) {
 	if (shouldUpdatePos)
 		m_position = m_sheetAbsolutePos[sheetId];
 	getBiffVersion(XL_WORKSHEET);
@@ -502,7 +502,7 @@ void Book::handleBoundsheet(const std::string& data) {
 	if (sheetType != XL_BOUNDSHEET_WORKSHEET)
 		m_sheetMap.push_back(-1);
 	else {
-		int size = m_sheetNames.size();
+		int size = static_cast<int>(m_sheetNames.size());
 		m_sheetMap.push_back(size);
 		m_sheetNames.push_back(sheetName);
 		m_sheetAbsolutePos.push_back(absolutePos);
@@ -662,11 +662,11 @@ void Book::initializeFormatInfo() {
 }
 
 void Book::unpackSst(const std::vector<std::string>& dataTable, int stringCount) {
-	std::string data = dataTable[0];
-	int dataIndex    = 0;
-	int dataSize     = dataTable.size();
-	int dataLength   = data.size();
-	int pos          = 8;
+	std::string data  = dataTable[0];
+	int dataIndex     = 0;
+	size_t dataSize   = dataTable.size();
+	size_t dataLength = data.size();
+	int pos           = 8;
 	m_sharedStrings.clear();
 	if (m_addStyle)
 		m_richtextRunlistMap.clear();
@@ -692,14 +692,14 @@ void Book::unpackSst(const std::vector<std::string>& dataTable, int stringCount)
 			int charsAvailable;
 			if (options & 0x01) {
 				// Uncompressed UTF-16
-				charsAvailable = std::min((dataLength - pos) >> 1, charsNeed);
+				charsAvailable = std::min(((int)dataLength - pos) >> 1, charsNeed);
 				result += data.substr(pos, 2*charsAvailable);
 				result  = encoding::decode(result, "UTF-16LE");
 				pos    += 2*charsAvailable;
 			}
 			else {
 				// Note: this is COMPRESSED (not ASCII!) encoding!!!
-				charsAvailable = std::min(dataLength - pos, charsNeed);
+				charsAvailable = std::min((int)dataLength - pos, charsNeed);
 				result += data.substr(pos, charsAvailable);
 				result  = encoding::decode(result, "ISO-8859-1");
 				pos    += charsAvailable;
@@ -717,16 +717,14 @@ void Book::unpackSst(const std::vector<std::string>& dataTable, int stringCount)
 		if (richTextCount) {
 			std::vector<std::pair<unsigned short, unsigned short>> runs;
 			for (int j = 0; j < richTextCount; ++j) {
-				if (pos == dataLength) {
+				if (pos == static_cast<int>(dataLength)) {
 					pos        = 0;
 					dataIndex += 1;
 					data       = dataTable[dataIndex];
 					dataLength = data.size();
 				}
-				runs.emplace_back(
-					readByte<unsigned short>(data, pos,   2),
-					readByte<unsigned short>(data, pos+2, 2)
-				);
+				runs.emplace_back(readByte<unsigned short>(data, pos,   2),
+								  readByte<unsigned short>(data, pos+2, 2));
 				pos += 4;
 			}
 			if (m_addStyle)
@@ -734,11 +732,11 @@ void Book::unpackSst(const std::vector<std::string>& dataTable, int stringCount)
 		}
 
 		pos += phoneticSize;  // Size of the phonetic stuff to skip
-		if (pos >= dataLength) {
+		if (pos >= static_cast<int>(dataLength)) {
 			// Adjust to correct position in next record
-			pos -= dataLength;
+			pos -= static_cast<int>(dataLength);
 			dataIndex++;
-			if (dataIndex < dataSize) {
+			if (dataIndex < static_cast<int>(dataSize)) {
 				data       = dataTable[dataIndex];
 				dataLength = data.size();
 			}
@@ -748,10 +746,10 @@ void Book::unpackSst(const std::vector<std::string>& dataTable, int stringCount)
 }
 
 void Book::namesEpilogue() {
-	int nameCount = m_nameObjList.size();
-	for (int i = 0; i < nameCount; ++i) {
+	size_t nameCount = m_nameObjList.size();
+	for (size_t i = 0; i < nameCount; ++i) {
 		Name& name = m_nameObjList[i];
-		int   internalSheetIndex = -3;
+		int internalSheetIndex = -3;
 		// Convert from excelSheetIndex to scope. Done here because in BIFF7 and earlier
 		// the BOUNDSHEET records come after the NAME records
 		if (m_biffVersion >= 80) {
@@ -778,11 +776,11 @@ void Book::namesEpilogue() {
 					internalSheetIndex = -2;
 			}
 		}
-		name.m_scope = internalSheetIndex;
+		name.m_scope = static_cast<int>(internalSheetIndex);
 	}
 
 	Formula formula(this);
-	for (int i = 0; i < nameCount; ++i) {
+	for (int i = 0; i < (int)nameCount; ++i) {
 		Name& name = m_nameObjList[i];
 		// Parse the formula
 		if (name.m_macro || name.m_isBinary || name.m_evaluated)
@@ -794,7 +792,7 @@ void Book::namesEpilogue() {
 	m_nameScopeMap.clear();
 	m_nameMap.clear();
 	std::map<std::string, std::vector<std::pair<Name, int>>> nameMap;
-	for (int i = 0; i < nameCount; ++i) {
+	for (int i = 0; i < (int)nameCount; ++i) {
 		Name& name = m_nameObjList[i];
 		std::string nameName = name.m_name;
 		std::transform(nameName.begin(), nameName.end(), nameName.begin(), ::tolower);

@@ -4,7 +4,7 @@
  * @file      doc.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright rembish (https://github.com/rembish/TextAtAnyCost)
- * @date      03.08.2017 -- 18.10.2017
+ * @date      03.08.2017 -- 29.01.2018
  */
 #include <regex>
 
@@ -71,13 +71,13 @@ void Doc::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 	// Find possible start of `pieceTable` (it must start at 0x02), then read next 4 bytes
 	// (size of pieceTable)
-	int from = 0;
+	size_t from = 0;
 	size_t pos;
 	// Find 0x02 from current offset in CLX
 	while ((pos = clx.find_first_of((char)0x02, from)) != std::string::npos) {
 		// Find `pieceTable` and its size
 		pieceTable    = clx.substr(pos + 5);
-		lcbPieceTable = readByte<int>(clx, pos + 1, 4);
+		lcbPieceTable = readByte<size_t>(clx, pos + 1, 4);
 		// If actual size differs from desired size then find again
 		if (pieceTable.size() != lcbPieceTable)
 			from = pos + 1;

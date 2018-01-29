@@ -4,7 +4,7 @@
  * @file      xlsx.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #include "../../tools.hpp"
 
@@ -135,8 +135,8 @@ std::string X12General::getTextFromSiIs(const pugi::xml_node& node) {
 
 void X12General::hexToColor(std::vector<unsigned char>& colorMap, const std::string& color, int offset) {
 	for (int i = 0; i < 6; i += 2) {
-		unsigned char c = std::stoul(color.substr(offset + i, 2), nullptr, 16);
-		colorMap.emplace_back(c);
+		unsigned long c = std::stoul(color.substr(offset + i, 2), nullptr, 16);
+		colorMap.emplace_back(static_cast<unsigned char>(c));
 	}
 }
 
@@ -236,7 +236,7 @@ void X12Book::handleDefinedNames(const pugi::xml_node& node) {
 }
 
 void X12Book::handleSheet(const pugi::xml_node& node) {
-	int sheetIndex    = m_book->m_sheetCount;
+	size_t sheetIndex = m_book->m_sheetCount;
 	std::string relId = node.attribute("r:id").value();
 	int sheetId       = node.attribute("sheetId").as_int();
 	std::string name  = node.attribute("name").value();
@@ -269,7 +269,7 @@ void X12Book::handleSheet(const pugi::xml_node& node) {
 	sheet.m_maxRowCount = X12_MAX_ROWS;
 	sheet.m_maxColCount = X12_MAX_COLS;
 
-	int found = target.find_last_of("/");
+	size_t found = target.find_last_of("/");
 	std::string relFileName = "xl/worksheets/_rels/"+ target.substr(found + 1) +".rels";
 
 	X12Sheet x12sheet(m_book, sheet);
@@ -285,8 +285,8 @@ void X12Book::handleSheet(const pugi::xml_node& node) {
 	}
 
 	if (m_book->m_extractImages) {
-		x12sheet.getDrawingRelationshipMap(sheetIndex);
-		x12sheet.handleImages(sheetIndex, div);
+		x12sheet.getDrawingRelationshipMap(static_cast<int>(sheetIndex));
+		x12sheet.handleImages(static_cast<int>(sheetIndex), div);
 	}
 
 	sheet.tidyDimensions();
@@ -296,8 +296,8 @@ void X12Book::createNameMap() {
 	m_book->m_nameScopeMap.clear();
 	m_book->m_nameMap.clear();
 	std::map<std::string, std::vector<std::pair<Name, int>>> nameMap;
-	int nameCount = m_book->m_nameObjList.size();
-	for (int i = 0; i < nameCount; ++i) {
+	size_t nameCount = m_book->m_nameObjList.size();
+	for (size_t i = 0; i < nameCount; ++i) {
 		Name& name = m_book->m_nameObjList[i];
 		std::string lcName = name.m_name;
 		std::transform(lcName.begin(), lcName.end(), lcName.begin(), ::tolower);
@@ -306,7 +306,7 @@ void X12Book::createNameMap() {
 		m_book->m_nameScopeMap.erase(key);
 		m_book->m_nameScopeMap.emplace(key, name);
 
-		nameMap[lcName].emplace_back(name, i);
+		nameMap[lcName].emplace_back(name, static_cast<int>(i));
 	}
 	for (auto& map : nameMap) {
 		std::sort(map.second.begin(), map.second.end());
@@ -330,7 +330,7 @@ void X12Sheet::handleRelations(const std::string& fileName) {
 		std::string relType = node.attribute("Type").value();
 		relType             = relType.substr(relType.find_last_of("/") + 1);
 
-		int found = fileName.find_last_of("/");
+		size_t found = fileName.find_last_of("/");
 		std::string rels_fname = "xl/worksheets/_rels/"+ fileName.substr(found + 1) +".rels";
 
 		m_relIdToType[relId] = relType;
@@ -423,7 +423,7 @@ void X12Sheet::handleCol(const pugi::xml_node& node) {
 	int firstColIndex = node.attribute("min").as_int();
 	int lastColIndex  = node.attribute("max").as_int();
 	Colinfo colinfo;
-	colinfo.m_width         = node.attribute("width").as_double() * 45 * 6;
+	colinfo.m_width         = static_cast<int>(node.attribute("width").as_double() * 45 * 6);
 	colinfo.m_isHidden      = node.attribute("hidden");
 	//colinfo.m_bitFlag     = ???
 	colinfo.m_outlineLevel  = node.attribute("outlineLevel").as_int();
@@ -638,7 +638,7 @@ void X12Sheet::handleRow(const pugi::xml_node& node) {
 void X12Sheet::handleDimensions(const pugi::xml_node& node) {
 	std::string ref = node.attribute("ref").value();
 	if (!ref.empty()) {
-		int found = ref.find_last_of(":");
+		size_t found = ref.find_last_of(":");
 		std::string lastRef = ref.substr(found + 1);  // Example: "Z99"
 		int rowIndex, colIndex;
 		cellNameToIndex(lastRef, rowIndex, colIndex, true);
@@ -652,7 +652,7 @@ void X12Sheet::handleMergedCells(const pugi::xml_node& node) {
 	// The ref attribute should be a cell range like "B1:D5"
 	std::string ref = node.attribute("ref").value();
 	if (!ref.empty()) {
-		int found = ref.find_last_of(":");
+		size_t found = ref.find_last_of(":");
 		std::string firstRef = ref.substr(0, found);
 		std::string lastRef  = ref.substr(found + 1);
 		int firstRowIndex, lastRowIndex , firstColIndex, lastColIndex;
@@ -673,7 +673,7 @@ void X12Sheet::handleTableParts(const pugi::xml_node& node) {
 	if (relType != "table")
 		return;
 
-	int found = target.find_last_of("/");
+	size_t found = target.find_last_of("/");
 	std::string relFileName = "xl/tables/"+ target.substr(found + 1);
 
 	// Extract file data
@@ -686,7 +686,7 @@ void X12Sheet::handleTableParts(const pugi::xml_node& node) {
 
 	if (!ref.empty()) {
 		// Cell ranges
-		int found = ref.find_last_of(":");
+		size_t found = ref.find_last_of(":");
 		std::string firstRef = ref.substr(0, found);
 		std::string lastRef  = ref.substr(found + 1);
 		int firstRowIndex, lastRowIndex , firstColIndex, lastColIndex;

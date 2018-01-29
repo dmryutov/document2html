@@ -35,7 +35,7 @@ void Json::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 	nlohmann::json document;
 	std::ifstream documentFile(m_fileName);
-	document << documentFile;
+	documentFile >> document;
 	documentFile.close();
 
 	addBrackets("{", "}", document, bodyTag);

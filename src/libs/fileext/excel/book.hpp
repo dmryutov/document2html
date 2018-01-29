@@ -4,7 +4,7 @@
  * @file      book.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #pragma once
 
@@ -177,7 +177,7 @@ public:
 	 */
 	unsigned char m_biffVersion = 0;
 	/** The number of worksheets in workbook */
-	int m_sheetCount;
+	size_t m_sheetCount;
 	/** All strings in workbook */
 	std::vector<std::string> m_sharedStrings;
 	/** Sheet list */
@@ -251,7 +251,7 @@ public:
 	 */
 	std::vector<std::vector<int>> m_paletteRecord;
 	/** List of already seen richtext records */
-	std::unordered_map<int, std::vector<std::pair<unsigned short, unsigned short>>> m_richtextRunlistMap;
+	std::unordered_map<size_t, std::vector<std::pair<unsigned short, unsigned short>>> m_richtextRunlistMap;
 	/** Number of FORMAT records seen so far */
 	int m_actualFormatCount = 0;
 	/** Number of built-in FORMAT records. Unknown as yet. BIFF 3, 4S, 4W */
@@ -341,7 +341,7 @@ private:
 	 *     Should update stream position
 	 * @since 1.0
 	 */
-	void getSheet(int sheetId, bool shouldUpdatePos = true);
+	void getSheet(size_t sheetId, bool shouldUpdatePos = true);
 
 	/**
 	 * @brief
@@ -542,7 +542,7 @@ public:
 	 */
 	bool m_isBinary = false;
 	/** Index of this object in @ref Book.m_nameObjList */
-	int m_nameIndex = 0;
+	size_t m_nameIndex = 0;
 	/** Object name (Unicode string). If built-in, decoded as per OOo docs */
 	std::string m_name;
 	/** 8-bit string */

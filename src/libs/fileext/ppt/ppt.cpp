@@ -4,7 +4,7 @@
  * @file      ppt.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright Alex Rembish (https://github.com/rembish/TextAtAnyCost)
- * @date      05.08.2017 -- 18.10.2017
+ * @date      05.08.2017 -- 29.01.2018
  */
 #include <list>
 #include <regex>
@@ -74,7 +74,8 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 		// Read 4 bytes:
 		// - 20 bits is the initial ID of entry in PersistDirectory,
 		// - 12 bits are the number of subsequent offsets
-		for (size_t k = 0; k < rgPersistDirEntry.size(); ) {
+		int size = static_cast<int>(rgPersistDirEntry.size());
+		for (int k = 0; k < size; ) {
 			int persist = readByte<int>(rgPersistDirEntry, k, 4);
 			int persistId = persist & 0x000FFFFF;
 			int cPersist = ((persist & 0xFFF00000) >> 20) & 0x00000FFF;
@@ -90,7 +91,7 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 	int docPersistIdRef = readByte<int>(live, 16, 4);
 	std::string documentContainer = getRecord(ppdStream, persistDirEntry[docPersistIdRef], 0x03E8);
 	// Skip a lot of trash data before `SlideList` structure
-	int offset = 48;
+	size_t offset = 48;
 	std::string trashRecord;
 	trashRecord = getRecord(documentContainer, offset, 0x0409);  // exObjList
 	if (!trashRecord.empty())
@@ -134,7 +135,7 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 
 		std::string block = getRecord(slideList, i);
-		switch (getRecordType(slideList, i)) {
+		switch (getRecordType(slideList, static_cast<int>(i))) {
 			// RT_SlidePersistAtom (Pointer to slide. Refer to `PersistDirectory` to get this slide)
 			case 0x03F3: {
 				int pid = readByte<int>(block, 0 , 4);
@@ -159,7 +160,7 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 				// Try to extract slide title (Office 2003 and earlier)
 				offset += 40;  // slideSchemeColorSchemeAtom
-				if (getRecordType(slide, offset) == 0x0FBA) {  // slideNameAtom
+				if (getRecordType(slide, static_cast<int>(offset)) == 0x0FBA) {  // slideNameAtom
 					std::string title  = unicodeToUtf8(getRecord(slide, offset, 0x0FBA));
 					auto slideTitleDiv = slideDiv.insert_child_after("div", slideNumberDiv);
 					slideTitleDiv.append_attribute("class") = "slide-title";
@@ -174,7 +175,7 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 					std::string header = drawing.substr(offset - 2, 2);
 					if (header[0] == '\x00' && header[1] == '\x00') {
 						// Read either Plain text or Unicode
-						if (offsetList[1] == 0xA8 || offsetList[1] == -88)
+						if (offsetList[1] == (char)0xA8 || offsetList[1] == -88)
 							addParagraph(getRecord(drawing, offset - 2, 0x0FA8), slideDataDiv);
 						else
 							addParagraph(unicodeToUtf8(getRecord(drawing, offset - 2, 0x0FA0)),
@@ -204,7 +205,9 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 
 // private:
-unsigned short Ppt::getRecordLength(const std::string& stream, int offset, unsigned short recType) const {
+unsigned short Ppt::getRecordLength(const std::string& stream, size_t offset,
+									  unsigned short recType) const
+{
 	std::string rh = stream.substr(offset, 8);
 	if (recType != 0 && recType != readByte<unsigned short>(rh, 2, 2))
 		return 0;
@@ -216,7 +219,7 @@ unsigned short Ppt::getRecordType(const std::string& stream, int offset) const {
 	return readByte<unsigned short>(rh, 2, 2);
 }
 
-std::string Ppt::getRecord(const std::string& stream, int offset, unsigned short recType) const {
+std::string Ppt::getRecord(const std::string& stream, size_t offset, unsigned short recType) const {
 	unsigned short length = getRecordLength(stream, offset, recType);
 	if (length == 0)
 		return "";

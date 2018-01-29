@@ -4,7 +4,7 @@
  * @file      txt.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright adhocore (https://github.com/adhocore/htmlup)
- * @date      01.08.2016 -- 18.10.2017
+ * @date      01.08.2016 -- 29.01.2018
  */
 #include <algorithm>
 #include <fstream>
@@ -117,8 +117,8 @@ void Txt::convert(bool addStyle, bool extractImages, char mergingMode) {
 		std::string trimmedNextLine = tools::trim(nextLine);
 		std::string nextMark12      = trimmedNextLine.empty() ? "" : trimmedNextLine.substr(0, 2);
 
-		int indent     = line.size() - tools::ltrim(line).size();
-		int nextIndent = nextLine.empty() ? 0 : nextLine.size() - tools::ltrim(nextLine).size();
+		size_t indent     = line.size() - tools::ltrim(line).size();
+		size_t nextIndent = nextLine.empty() ? 0 : nextLine.size() - tools::ltrim(nextLine).size();
 
 		// Blockquote
 		std::smatch quoteMatch;
@@ -138,7 +138,7 @@ void Txt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 		// `H1`-`H6` tags
 		if (mark1 == '#') {
-			int level = trimmedLine.size() - tools::ltrim(trimmedLine, "#").size();
+			size_t level = trimmedLine.size() - tools::ltrim(trimmedLine, "#").size();
 			if (level < 7) {
 				m_html += "\n<h" + std::to_string(level) +">"+ tools::ltrim(trimmedLine, "# ") +
 						"</h"+ std::to_string(level) +">";
@@ -192,7 +192,7 @@ void Txt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 				// Handle nested lists ending
 				if (nextIndent < indent) {
-					int shift = (indent - nextIndent) / 4;
+					size_t shift = (indent - nextIndent) / 4;
 					while (shift--) {
 						m_html += stackList.back();
 						stackList.pop_back();
@@ -217,14 +217,12 @@ void Txt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 		// Table
 		std::string cell = tools::trim(trimmedLine, "|");
-		int headerCount  = count(cell.begin(), cell.end(), '|');
+		size_t headerCount  = count(cell.begin(), cell.end(), '|');
 		cell = tools::trim(trimmedNextLine, "|");
 
 		if (!inTable) {
-			int colCount = distance(
-								std::sregex_iterator(cell.begin(), cell.end(), TABLE_REGEX),
-								std::sregex_iterator()
-							);
+			size_t colCount = distance(std::sregex_iterator(cell.begin(), cell.end(), TABLE_REGEX),
+									   std::sregex_iterator());
 
 			if (headerCount != 0 && headerCount <= colCount) {
 				inTable = true;
@@ -244,7 +242,7 @@ void Txt::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 			std::stringstream row(tools::trim(trimmedLine, "|"));
 			std::string td;
-			int i = 0;
+			size_t i = 0;
 			while (getline(row, td, '|') && i++ <= headerCount)
 				m_html += "<td>"+ tools::trim(td) +"</td>";
 

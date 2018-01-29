@@ -5,7 +5,7 @@
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright rembish (https://github.com/rembish/TextAtAnyCost)
  * @version   1.1
- * @date      18.09.2016 -- 18.10.2017
+ * @date      18.09.2016 -- 29.01.2018
  */
 #pragma once
 
@@ -52,7 +52,7 @@ public:
 	 * @since 1.0
 	 */
 	template<typename T>
-	T readByte(const std::string& data, int offset, int size) const;
+	T readByte(const std::string& data, size_t offset, int size) const;
 
 	/**
 	 * @brief
@@ -219,7 +219,7 @@ private:
 
 
 template<typename T>
-T Cfb::readByte(const std::string& data, int offset, int size) const {
+T Cfb::readByte(const std::string& data, size_t offset, int size) const {
 	std::string str = data.substr(offset, size);
 	if (m_isLittleEndian)
 		std::reverse(str.begin(), str.end());
@@ -241,7 +241,9 @@ T Cfb::readByte(const std::string& data, int offset, int size) const {
 }
 
 template<>
-inline std::string Cfb::readByte<std::string>(const std::string& data, int offset, int size) const {
+inline std::string Cfb::readByte<std::string>(const std::string& data, size_t offset,
+											   int size) const
+{
 	return data.substr(offset, size);
 	/*std::string str = binToHex(data.substr(offset, size));
 

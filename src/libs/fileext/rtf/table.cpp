@@ -77,7 +77,7 @@ void Table::make(pugi::xml_node& node) {
 					if (!(*cellDef2)->m_isMerged)
 						break;
 				}
-				(*cell)->m_rowspan = spanRow - row;
+				(*cell)->m_rowspan = static_cast<int>(spanRow - row);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ void Table::make(pugi::xml_node& node) {
 			++cell, ++cellDef
 		) {
 			ptp = pts.find((*cellDef)->m_right);
-			colspan = std::distance(pt, ptp);
+			colspan = static_cast<int>(std::distance(pt, ptp));
 			pt = ptp;
 
 			if (!(*cellDef)->m_isMerged) {

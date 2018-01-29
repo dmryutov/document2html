@@ -4,7 +4,7 @@
  * @file      pdf.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright Alex Rembish (https://github.com/rembish/TextAtAnyCost)
- * @date      06.08.2017 -- 18.10.2017
+ * @date      06.08.2017 -- 29.01.2018
  */
 #include <math.h>
 #include <fstream>
@@ -157,7 +157,7 @@ std::string Pdf::decodeStream(const std::string& stream,
 		int length = (optionList.find("Length") != optionList.end() &&
 					  optionList["Length"].find(' ') == std::string::npos)
 					 ? stoi(optionList["Length"])
-					 : stream.size();
+					 : static_cast<int>(stream.size());
 		data = stream.substr(0, length);
 
 		// Find option with instructions for compressing data in current stream and apply
@@ -272,7 +272,7 @@ std::string Pdf::decodeAscii85(const std::string& input) const {
 		return "";
 	else if (state > 1) {
 		for (int i = 0, sum = 0; i < state; ++i)
-			sum += (ords[i] + (i == state - 1)) * pow(85, 4 - i);
+			sum += (ords[i] + (i == state - 1)) * (int)pow(85, 4 - i);
 		for (int i = 0; i < state - 1; ++i)
 			result += (char)(sum >> ((3 - i) * 8));
 	}
@@ -281,7 +281,7 @@ std::string Pdf::decodeAscii85(const std::string& input) const {
 }
 
 std::string Pdf::decodeFlate(const std::string& input) const {
-	unsigned long  originalLength = input.size();
+	unsigned long  originalLength = (unsigned char)input.size();
 	unsigned long  decodedLength  = originalLength * 2;
 	unsigned char* originalString = (unsigned char*)input.c_str();
 	unsigned char* decodedString  = (unsigned char*)malloc(decodedLength);
@@ -385,21 +385,21 @@ void Pdf::getTransformationList(const std::string& stream,
 			std::string str = tools::trim(current[k]);
 			if (std::regex_search(str, sm2, RANGE_TYPE1_MASK)) {
 				// Convert data to decimal (it's easier to iterate)
-				size_t from  = std::stoi(sm2[1], nullptr, 16);
-				size_t to    = std::stoi(sm2[2], nullptr, 16);
-				size_t _from = std::stoi(sm2[3], nullptr, 16);
+				int from  = std::stoi(sm2[1], nullptr, 16);
+				int to    = std::stoi(sm2[2], nullptr, 16);
+				int _from = std::stoi(sm2[3], nullptr, 16);
 
-				for (size_t m = from, n = 0; m <= to; ++m, ++n)
+				for (int m = from, n = 0; m <= to; ++m, ++n)
 					transformationList[tools::intToHex(m, 4)] = tools::intToHex(_from + n, 4);
 			}
 			// Sequence of second type
 			else if (std::regex_search(str, sm2, RANGE_TYPE1_MASK)) {
 				// Convert data to decimal (it's easier to iterate)
-				size_t from  = std::stoi(sm2[1], nullptr, 16);
-				size_t to    = std::stoi(sm2[2], nullptr, 16);
+				int from  = std::stoi(sm2[1], nullptr, 16);
+				int to    = std::stoi(sm2[2], nullptr, 16);
 				std::vector<std::string> parts = tools::explode(sm2[3], " \n\r\t\b\f", true);
 
-				for (size_t m = from, n = 0; m <= to && n < parts.size(); ++m, ++n)
+				for (int m = from, n = 0; m <= to && n < (int)parts.size(); ++m, ++n)
 					transformationList[tools::intToHex(m, 4)] = tools::intToHex(std::stoi(parts[n], nullptr, 16), 4);
 			}
 		}
@@ -453,9 +453,9 @@ void Pdf::getImages(std::string imageData,
 				c = c * (1 - k) + k;
 				m = m * (1 - k) + k;
 				y = y * (1 - k) + k;
-				img.emplace_back((1 - c) * 255);
-				img.emplace_back((1 - m) * 255);
-				img.emplace_back((1 - y) * 255);
+				img.emplace_back(static_cast<unsigned char>((1 - c) * 255));
+				img.emplace_back(static_cast<unsigned char>((1 - m) * 255));
+				img.emplace_back(static_cast<unsigned char>((1 - y) * 255));
 				img.emplace_back(255);
 			}
 		}
@@ -485,9 +485,9 @@ void Pdf::transformText(pugi::xml_node& htmlNode) const {
 		std::string plain;
 		std::string document;
 		std::string text = textPair.first;
-		int textSize = text.size();
+		size_t textSize = text.size();
 		int step = font.second ? 4 : 2;
-		for (int j = 0; j < textSize; ++j) {
+		for (size_t j = 0; j < textSize; ++j) {
 			char c = text[j];
 			switch (c) {
 				// Begining of hex-data

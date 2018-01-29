@@ -274,8 +274,6 @@ void Rtf::convert(bool addStyle, bool extractImages, char mergingMode) {
 					}
 					else if (keyword == "enspace" || keyword == "emspace")
 						htmlText.add("\u00A0");  // &nbsp;
-					else if (keyword == "qmspace")
-						htmlText.add("\u2009");  // &thinsp;
 					else if (keyword == "endash")
 						htmlText.add("\u2013");  // &ndash;
 					else if (keyword == "emdash")
@@ -293,7 +291,7 @@ void Rtf::convert(bool addStyle, bool extractImages, char mergingMode) {
 
 					// Paragraph formatting
 					else if (keyword == "li")
-						currentFormat.m_listLevel = rint(kw.m_parameter/20);
+						currentFormat.m_listLevel = kw.m_parameter/20;
 					else if (keyword == "pard") {
 						currentFormat.m_listLevel  = 0;
 						currentFormat.m_parInTable = false;
@@ -572,8 +570,6 @@ std::string Rtf::codeToText(std::string::iterator& it) {
 			return "\u201D";  // &rdquo;
 		case 167:
 			return "\u00A7";  // &sect;
-		case 188:
-			return "\u00BC";  // &frac14;
 		default:
 			return std::string(1, (char)code);
 	}

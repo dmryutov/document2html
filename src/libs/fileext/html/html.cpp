@@ -3,7 +3,7 @@
  * @package html
  * @file    html.cpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @date    04.08.2016 -- 11.11.2017
+ * @date    04.08.2016 -- 28.01.2018
  */
 #include <algorithm>
 #include <fstream>
@@ -123,10 +123,11 @@ void Html::ireplaceAll(std::string& str, const std::string& from, const std::str
 	if (from.empty())
 		return;
 	size_t pos = 0;
-	while ((pos = ifind(str, from, pos)) != std::string::npos) {
-		str.replace(pos, from.length(), to);
+	size_t fromSize = from.size();
+	while ((pos = ifind(str, from, static_cast<int>(pos))) != std::string::npos) {
+		str.replace(pos, fromSize, to);
 		// If `to` contains `from` (like replacing 'x' with 'yx')
-		pos += to.length();
+		pos += to.size();
 	}
 }
 

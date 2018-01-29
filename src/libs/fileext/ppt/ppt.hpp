@@ -68,7 +68,8 @@ private:
 	 *     Structure length
 	 * @since 1.0
 	 */
-	unsigned short getRecordLength(const std::string& stream, int offset, unsigned short recType = 0) const;
+	unsigned short getRecordLength(const std::string& stream, size_t offset,
+									 unsigned short recType = 0) const;
 
 	/**
 	 * @brief
@@ -98,7 +99,7 @@ private:
 	 *     Record data
 	 * @since 1.0
 	 */
-	std::string getRecord(const std::string& stream, int offset, unsigned short recType = 0) const;
+	std::string getRecord(const std::string& stream, size_t offset, unsigned short recType = 0) const;
 
 	/**
 	 * @brief

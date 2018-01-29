@@ -4,7 +4,7 @@
  * @file      sheet.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #pragma once
 
@@ -145,7 +145,7 @@ public:
 	 * @since 1.0
 	 */
 	Sheet(Book* book, int position, const std::string& name,
-		  int number, pugi::xml_node& table);
+		  size_t number, pugi::xml_node& table);
 
 	/**
 	 * @brief
@@ -183,7 +183,7 @@ public:
 	/** Sheet name */
 	std::string m_name;
 	/** Sheet number */
-	int m_number;
+	size_t m_number;
 	/** Number of rows in sheet */
 	int m_rowCount = 0;
 	/**

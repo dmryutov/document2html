@@ -4,7 +4,7 @@
  * @file      excel.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 18.10.2017
+ * @date      02.12.2016 -- 28.01.2018
  */
 #include <fstream>
 
@@ -50,8 +50,8 @@ void Excel::convert(bool addStyle, bool extractImages, char mergingMode) {
 	}
 
 	// Add tabs
-	int sheetCount = book->m_sheetList.size();
-	for (int i = 1; i <= sheetCount; ++i) {
+	size_t sheetCount = book->m_sheetList.size();
+	for (size_t i = 1; i <= sheetCount; ++i) {
 		auto nd = bodyTag.insert_child_before("input", mainNode);
 		nd.append_attribute("id") = ("tab" + std::to_string(i)).c_str();
 		nd.append_attribute("type") = "radio";
