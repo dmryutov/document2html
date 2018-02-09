@@ -4,7 +4,7 @@
  * @file      sheet.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 28.01.2018
+ * @date      02.12.2016 -- 09.02.2018
  */
 #include "../../tools.hpp"
 
@@ -1005,13 +1005,15 @@ void Sheet::tidyDimensions() {
 		int colCount = -1;
 		for (const auto& cRange : m_mergedCells) {
 			auto tr = std::next(m_table.children("tr").begin(), cRange[0]);
+			int childrenCount = tools::xmlChildrenCount(*tr, "td");
 
 			for (int i = cRange[0]; i < cRange[1]; ++i) {
 				if (rowIndex != i) {
 					rowIndex = i;
 					colCount = 0;
 				}
-				auto td = std::next(tr->children("td").begin(), cRange[3] - colCount-1);
+				int offset = std::min(childrenCount - 1, cRange[3] - colCount-1);
+				auto td = std::next(tr->children("td").begin(), offset);
 
 				int endRange = cRange[3] - (rowIndex == cRange[0]);
 				for (int j = cRange[2]; j < endRange; ++j) {
