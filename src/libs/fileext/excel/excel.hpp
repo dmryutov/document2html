@@ -4,7 +4,7 @@
  * @file      excel.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @version   1.1
+ * @version   1.1.1
  * @date      02.12.2016 -- 18.10.2017
  */
 #pragma once

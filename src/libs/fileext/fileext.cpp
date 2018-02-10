@@ -3,7 +3,7 @@
  * @package fileext
  * @file    fileext.cpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @date    12.07.2016 -- 17.10.2017
+ * @date    12.07.2016 -- 10.02.2018
  */
 #include <fstream>
 
@@ -69,11 +69,7 @@ void FileExtension::saveHtml(std::string dir, const std::string& fileName) const
 	//m_htmlTree.save(outputFile, "\t", pugi::format_no_empty_element_tags, pugi::encoding_utf16_be);
 }
 
-void FileExtension::loadStyle(pugi::xml_node& node, const std::string& fileName) const {
-	std::ifstream styleFile(fileName);
-	std::string style((std::istreambuf_iterator<char>(styleFile)),
-					  (std::istreambuf_iterator<char>()));
-	styleFile.close();
+void FileExtension::loadStyle(pugi::xml_node& node, const std::string& style) const {
 	node.append_child("style").append_child(pugi::node_pcdata).set_value(style.c_str());
 }
 

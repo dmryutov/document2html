@@ -3,8 +3,7 @@
  * @package   xml
  * @file      xml.cpp
  * @author    dmryutov (dmryutov@gmail.com)
- * @version   1.0
- * @date      04.08.2016 -- 18.10.2017
+ * @date      04.08.2016 -- 10.02.2018
  */
 #include <fstream>
 
@@ -15,9 +14,10 @@
 
 namespace xml {
 
-/** Specific style file path */
-//const std::string STYLE_FILE = tools::PROGRAM_PATH + "/files/style/xmlStyle.min.css";
-const std::string STYLE_FILE = "style.css";
+/** Inline style */
+const std::string STYLE = "div{font-family:monospace;font-size:13px}.content{margin-left:25px}"
+						  ".tag{color:#881280}.attribute-name{color:#994500}"
+						  ".attribute-value{color:#1a1aa6}";
 
 // public:
 Xml::Xml(const std::string& fileName)
@@ -31,7 +31,7 @@ void Xml::convert(bool addStyle, bool extractImages, char mergingMode) {
 	auto htmlTag = m_htmlTree.append_child("html");
 	auto headTag = htmlTag.append_child("head");
 	auto bodyTag = htmlTag.append_child("body");
-	FileExtension::loadStyle(headTag, STYLE_FILE);
+	FileExtension::loadStyle(headTag, STYLE);
 
 	pugi::xml_document tree;
 	tree.load_file(m_fileName.c_str());

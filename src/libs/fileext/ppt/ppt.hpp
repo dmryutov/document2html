@@ -4,8 +4,8 @@
  * @file      ppt.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright Alex Rembish (https://github.com/rembish/TextAtAnyCost)
- * @version   1.0
- * @date      05.08.2017 -- 18.10.2017
+ * @version   1.0.1
+ * @date      05.08.2017 -- 10.02.2018
  */
 #pragma once
 

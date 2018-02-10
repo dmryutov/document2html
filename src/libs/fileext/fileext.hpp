@@ -3,8 +3,8 @@
  * @package fileext
  * @file    fileext.hpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @version 1.1
- * @date    12.07.2016 -- 30.10.2017
+ * @version 1.1.1
+ * @date    12.07.2016 -- 10.02.2018
  */
 #pragma once
 
@@ -72,11 +72,11 @@ public:
 	 *     Load specific format style
 	 * @param[in] node
 	 *     HTML `head` element
-	 * @param[in] fileName
-	 *     Name of style file
-	 * @since 1.0
+	 * @param[in] style
+	 *     Inline style
+	 * @since 1.1.1
 	 */
-	void loadStyle(pugi::xml_node& node, const std::string& fileName) const;
+	void loadStyle(pugi::xml_node& node, const std::string& style) const;
 
 	/** Result HTML tree */
 	pugi::xml_document m_htmlTree;

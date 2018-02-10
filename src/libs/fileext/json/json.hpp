@@ -3,8 +3,8 @@
  * @package json
  * @file    json.hpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @version 1.0
- * @date    04.08.2017 -- 18.10.2017
+ * @version 1.0.1
+ * @date    04.08.2017 -- 10.02.2018
  */
 #pragma once
 

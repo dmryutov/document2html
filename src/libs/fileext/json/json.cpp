@@ -3,8 +3,7 @@
  * @package json
  * @file    json.cpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @version 1.0
- * @date    04.08.2017 -- 18.10.2017
+ * @date    04.08.2017 -- 10.02.2018
  */
 #include <fstream>
 
@@ -15,9 +14,11 @@
 
 namespace json {
 
-/** Specific style file path */
-//const std::string STYLE_FILE = tools::PROGRAM_PATH + "/files/style/jsonStyle.min.css";
-const std::string STYLE_FILE = "style.css";
+/** Inline style */
+const std::string STYLE = ".key,.value{display:inline-block}div{font-family:monospace;"
+						  "font-size:13px}.content{margin-left:25px}.value{font-size:0}"
+						  ".value span{font-size:13px}.key-data{color:#994500}"
+						  ".value-data{color:#1a1aa6}";
 
 // public:
 Json::Json(const std::string& fileName)
@@ -31,7 +32,7 @@ void Json::convert(bool addStyle, bool extractImages, char mergingMode) {
 	auto htmlTag = m_htmlTree.append_child("html");
 	auto headTag = htmlTag.append_child("head");
 	auto bodyTag = htmlTag.append_child("body");
-	FileExtension::loadStyle(headTag, STYLE_FILE);
+	FileExtension::loadStyle(headTag, STYLE);
 
 	nlohmann::json document;
 	std::ifstream documentFile(m_fileName);

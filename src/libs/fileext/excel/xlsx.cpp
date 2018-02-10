@@ -256,7 +256,7 @@ void X12Book::handleSheet(const pugi::xml_node& node) {
 
 	// Add sheet information
 	auto div = m_book->m_htmlTree.append_child("div");
-	div.append_attribute("id") = ("tabC"+ std::to_string(sheetId)).c_str();
+	div.append_attribute("id") = ("tabC"+ std::to_string(sheetIndex + 1)).c_str();
 	auto table = div.append_child("table");
 
 	m_book->m_sheetList.emplace_back(m_book, -1, name, sheetIndex, table);

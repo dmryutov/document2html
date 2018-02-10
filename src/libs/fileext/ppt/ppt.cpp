@@ -4,7 +4,7 @@
  * @file      ppt.hpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright Alex Rembish (https://github.com/rembish/TextAtAnyCost)
- * @date      05.08.2017 -- 29.01.2018
+ * @date      05.08.2017 -- 10.02.2018
  */
 #include <list>
 #include <regex>
@@ -18,9 +18,11 @@
 namespace ppt {
 
 const std::regex HEADER_MASK("(\xA8|\xA0)\x0F", std::regex::icase);
-/** Specific style file path */
-//const std::string STYLE_FILE = tools::PROGRAM_PATH + "/files/style/pptStyle.min.css";
-const std::string STYLE_FILE = "style.css";
+/** Inline style */
+const std::string STYLE = "div{font-family: monospace;font-size: 13px}.slide{margin-bottom: 20px;"
+						  "padding-bottom: 10px;border-bottom: 1px solid #ddd}.slide-number{"
+						  "font-weight: bold;font-size: 15px;margin-bottom: 10px}.slide-title{"
+						  "font-weight: bold;font-size: 13px;margin-bottom: 10px}";
 
 // public:
 Ppt::Ppt(const std::string& fileName)
@@ -34,7 +36,7 @@ void Ppt::convert(bool addStyle, bool extractImages, char mergingMode) {
 	auto htmlTag = m_htmlTree.append_child("html");
 	auto headTag = htmlTag.append_child("head");
 	auto bodyTag = htmlTag.append_child("body");
-	FileExtension::loadStyle(headTag, STYLE_FILE);
+	FileExtension::loadStyle(headTag, STYLE);
 
 	Cfb::parse();
 	// File must contain `Current User` stream

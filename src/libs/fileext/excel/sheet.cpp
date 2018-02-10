@@ -4,7 +4,7 @@
  * @file      sheet.cpp
  * @author    dmryutov (dmryutov@gmail.com)
  * @copyright python-excel (https://github.com/python-excel/xlrd)
- * @date      02.12.2016 -- 09.02.2018
+ * @date      02.12.2016 -- 10.02.2018
  */
 #include "../../tools.hpp"
 

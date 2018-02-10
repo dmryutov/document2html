@@ -3,8 +3,8 @@
  * @package xml
  * @file    xml.hpp
  * @author  dmryutov (dmryutov@gmail.com)
- * @version 1.0
- * @date    04.08.2016 -- 18.10.2017
+ * @version 1.0.1
+ * @date    04.08.2016 -- 10.02.2018
  */
 #pragma once
 
