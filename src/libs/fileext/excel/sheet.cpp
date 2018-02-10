@@ -1005,14 +1005,13 @@ void Sheet::tidyDimensions() {
 		int colCount = -1;
 		for (const auto& cRange : m_mergedCells) {
 			auto tr = std::next(m_table.children("tr").begin(), cRange[0]);
-			int childrenCount = tools::xmlChildrenCount(*tr, "td");
 
 			for (int i = cRange[0]; i < cRange[1]; ++i) {
 				if (rowIndex != i) {
 					rowIndex = i;
 					colCount = 0;
 				}
-				int offset = std::min(childrenCount - 1, cRange[3] - colCount-1);
+				int offset = std::min(tools::xmlChildrenCount(*tr, "td"), cRange[3] - colCount) - 1;
 				auto td = std::next(tr->children("td").begin(), offset);
 
 				int endRange = cRange[3] - (rowIndex == cRange[0]);
